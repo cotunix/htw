@@ -184,7 +184,7 @@ public class CaveServer {
 								String[] action = line.split(" ");
 								int roomNumber = Integer.parseInt(action[2]);
 								
-								
+								ArrayList<String> response = new ArrayList<String> ();
 								if (r.getRoom(roomNumber) != null) {
 									r.leaveRoom(client);
 									r = r.getRoom(roomNumber);
@@ -192,15 +192,15 @@ public class CaveServer {
 									client.sendSenses(r.getSensed());
 									
 									if (r.hasPit) {
-										ArrayList<String> response = new ArrayList<String> ();
+										
 										response.add("You've fallen into a pit and died!");
 										client.sendNotifications(response);
 										r.leaveRoom(client);
 										client.died();
 									}
 									
-									if (r.hasBats) {
-										ArrayList<String> response = new ArrayList<String> ();
+									else if (r.hasBats) {
+										
 										response.add("You've been teleported to a random room by pesky bats!");
 										client.sendNotifications(response);
 										
@@ -214,7 +214,7 @@ public class CaveServer {
 									}
 									
 									if (r.hasWumpus) {
-										ArrayList<String> response = new ArrayList<String> ();
+										
 										response.add("You have been killed by the Wumpus!");
 										client.sendNotifications(response);
 										
@@ -235,6 +235,12 @@ public class CaveServer {
 									rooms.get(newWumpRoom).hasWumpus = true;
 									wumpusRoom = newWumpRoom;				
 									
+								}
+								
+								else {
+									response.add("You can't move to that room!");
+									
+									client.sendNotifications(response);
 								}
 
 							} else if(line.startsWith(Protocol.SHOOT_ACTION)) {
